@@ -39,7 +39,8 @@ To decouple physical semiconductor degradation (thermal/electromigration) from t
 * **Layer 2: Multi-Node Dynamic Shape Insulation Tower (`aging_dynamic_adapter.py`)**
   * Handles cluster-wide coordination and macro-level graph stabilization.
   * Implements experimental static graph freezing using power-of-two memory buckets.
-  * Utilizes algebraic vacuum masking (e.g., `-1e9` scaling) to suppress failed node inputs, aiming to prevent catastrophic re-compilation loops.
+  * Utilizes algebraic vacuum masking (e.g., rigid `int32` bit-aligned **-1000000000** scaling, abstractly referenced as `-1e9`) to suppress failed node inputs, aiming to eliminate host-side type-promotion overhead and prevent catastrophic re-compilation loops.
+
 
 ---
 
