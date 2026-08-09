@@ -73,21 +73,21 @@ class AgingFngOrchestrator:
             [🔒 ON-CHIP SIMD ADIABATIC CONVERGENCE KERNEL]
             XLA 컴파일러 단에서 분기문이 완전히 제거된 정적 선형 대수 매니폴드.
             """
-            // ❶ 고장 노드 수치 소멸 및 실시간 블랙아웃 페일오버 (Silicon Blackout Failover Gate)
+            # ❶ 고장 노드 수치 소멸 및 실시간 블랙아웃 페일오버 (Silicon Blackout Failover Gate)
             is_healthy = (local_fault_masks >= 0)
             purified_grads = jnp.where(is_healthy, local_gradients, 0.0)
 
-            // ❷ [💥 HARDWARE ATOMIC CONCURRENT STREAM MERGE]
-            // [CORRECTED]: JAX shard_map 스펙 준수. all_gather 기동 시 통신 분산 축은 
-            // 항상 새로운 선두 차원(axis=0)으로 생성되므로, 컴파일러 텐서 뷰 오염을 막기 위해 0번 축으로 정밀 사수
+            # ❷ [💥 HARDWARE ATOMIC CONCURRENT STREAM MERGE]
+            # [CORRECTED]: JAX shard_map 스펙 준수. all_gather 기동 시 통신 분산 축은 
+            # 항상 새로운 선두 차원(axis=0)으로 생성되므로, 컴파일러 텐서 뷰 오염을 막기 위해 0번 축으로 정밀 사수
             gathered_gradients = jax.lax.all_gather(
                 purified_grads, 
                 axis_name=self.axis_name, 
                 axis=0  # 정적 텐서 통신 축 규격 최상단 고정
             )
             
-            // ❸ unique_indices=False와 수학적으로 동등한 하드웨어 분산 동시 적재 수치적 항상성(Homeostasis) 결합
-            // [CORRECTED]: 올개더된 0번 가속기 축 방향으로 선형 축소(Reduction)를 집행하여 원래의 텐서 구조 복원
+            # ❸ unique_indices=False와 수학적으로 동등한 하드웨어 분산 동시 적재 수치적 항상성(Homeostasis) 결합
+            # [CORRECTED]: 올개더된 0번 가속기 축 방향으로 선형 축소(Reduction)를 집행하여 원래의 텐서 구조 복원
             fused_gradient_manifold = jnp.sum(gathered_gradients, axis=0)
             
             return fused_gradient_manifold
