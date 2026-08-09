@@ -70,3 +70,55 @@ adiabatic-silicon-aging-guard/
 * **`setup.py`**: Automates cross-compilation boundaries between native CUDA extensions and host-side execution environments.
 * **`aging_guard_core.cu` & `aging_bridge_wrapper.cpp`**: Establish the low-level interception boundary, bridging hardware-level warp synchronization directly into pythonic lifecycles.
 * **`aging_fng_orchestrator.py`**: Investigates the runtime feasibility of moving high-dimensional live numerical tensors across simulated fading nodes without re-triggering expensive XLA compilation passes.
+
+---
+
+```mermaid
+
+graph TD
+    %% 노드 스타일 정의
+    classDef framework fill:#2A2A2A,stroke:#4A4A4A,stroke-width:2px,color:#FFFFFF;
+    classDef layer2 fill:#1E293B,stroke:#38BDF8,stroke-width:2px,color:#E2E8F0;
+    classDef layer15 fill:#111827,stroke:#A855F7,stroke-width:2px,color:#E2E8F0;
+    classDef layer1 fill:#31100F,stroke:#EF4444,stroke-width:2px,color:#FCA5A5;
+    classDef binary fill:#14532D,stroke:#22C55E,stroke-width:2px,color:#BBF7D0;
+
+    %% 프레임워크 계층
+    FW["🛡️ Commercial Framework Layer<br>(Llama-3 / DeepSeek-V4 Backbone Rails)"]:::framework
+
+    %% 레이어 2 (런타임 하이재커 및 어댑터)
+    subgraph L2 ["Layer 2: Python Runtime & Shape Management"]
+        MP["🪡 aging_monkey_patch.py<br>(Runtime Hyper-Jacker Factory)"]:::layer2
+        DA["📦 aging_dynamic_adapter.py<br>(Shape Insulation Adapter)<br><br>• Power-of-Two Static Buckets (64 ~ 4096)<br>• Algebraic Vacuum Masking (0.0f / -1e9)"]:::layer2
+    end
+
+    %% 레이어 1.5 (C++ 브릿지)
+    subgraph L15 ["Layer 1.5: Native Bridge"]
+        BW["🪐 aging_bridge_wrapper.cpp<br>(C++ PyBind11 / DLPack Capsule Fence)<br><br>• Native Python GIL Release Mechanism<br>• Warp-Synchronous Stream Wait Barrier"]:::layer15
+    end
+
+    %% 레이어 1 (베어메탈 CUDA 커널)
+    subgraph L1 ["Layer 1: Bare-Metal Silicon Intercept"]
+        GC["🛡️ aging_guard_core.cu<br>(Silicon Intercept MUX Kernel)<br><br>• 32-Bit Ballot Aggregation (__ballot_sync)<br>• 1-Clock Branchless Prediction MUX (selp.f32)<br>• Burgers' Spatial Laplacian Viscosity Damping"]:::layer1
+    end
+
+    %% 컴파일 결과물
+    BI["⚙️ Fused Static HLO Binary Executable<br>(0% Graph Break / No-recompile Pass)"]:::binary
+
+    %% 연결 관계 및 라벨링 (특수문자 포함 라벨 큰따옴표 처리 완료)
+    FW -->|"Surgical Interception via CPython Method Table Hijacking [0ns]"| MP
+    
+    MP -->|"64-bit Virtual VA"| DA
+    MP -->|"Fault Signals Tensor"| DA
+    
+    DA -->|"0-Byte Pre-allocated Shell"| BW
+    DA -->|"Pinned Pointer Core"| BW
+    
+    BW -->|"Direct VRAM Address Injection"| GC
+    BW -->|"Async Stream Queue"| GC
+    
+    GC -->|"0% Graph Break / No-recompile Pass"| BI
+
+
+
+```
