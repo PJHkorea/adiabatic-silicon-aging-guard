@@ -50,12 +50,23 @@ To decouple physical semiconductor degradation (thermal/electromigration) from t
 
 ---
 
+## 📂 Repository Directory Structure & Component Matrix
+
+This repository implements the 3-tier failure-fencing architecture through the following experimental components:
+
+```text
 adiabatic-silicon-aging-guard/
-├── 1. setup.py                   # NVCC/GCC 정적 바이너리 컴파일 컴파일러 자동화 빌더
-├── 2. aging_fabric_config.py     # 에이징 버킷 규격 및 전역 환경 변수 선언 마스터
-├── 3. aging_guard_core.cu        # [Layer 1] 베어메탈 1비트 술어 레지스터 MUX 커널
-├── 4. aging_bridge_wrapper.cpp   # [Layer 1.5] GIL 해제 및 DLPack 0-Byte 포인터 캡슐 펜스
-├── 5. aging_dynamic_adapter.py   # [Layer 2] 2의 거듭제곱 오프라인 컴파일 동결 어댑터
-├── 6. aging_fng_orchestrator.py  # [Layer 2] jax.shard_map 기반 단열 매니폴드 거버너
-├── 7. aging_monkey_patch.py      # 상용 트랜스포머 레이어 런타임 수술용 하이재커
-└── 8. test_aging_pipeline.py     # 88% 반도체 노화/열화 스트레스 모의 벤치마크 테스터
+├── setup.py                   # Automated compiler builder for NVCC/GCC static binary compilation
+├── aging_fabric_config.py     # Global environment orchestrator & aging bucket specification layout
+├── aging_guard_core.cu        # [Layer 1] Bare-metal 1-bit predicate register MUX kernel
+├── aging_bridge_wrapper.cpp   # [Layer 1.5] Asynchronous GIL-release & DLPack zero-overhead pointer capsule fence
+├── aging_dynamic_adapter.py   # [Layer 2] Offline static graph freezing adapter via power-of-two memory buckets
+├── aging_fng_orchestrator.py  # [Layer 2] jax.experimental.shard_map-driven adiabatic manifold governor
+├── aging_monkey_patch.py      # Runtime instrumentation hook for production-grade Transformer layer interception
+└── test_aging_pipeline.py     # Simulated benchmark suite under high-stress semiconductor thermal/aging degradation
+```
+
+### 🔬 Core Implementation Breakdown
+* **`setup.py`**: Automates cross-compilation boundaries between native CUDA extensions and host-side execution environments.
+* **`aging_guard_core.cu` & `aging_bridge_wrapper.cpp`**: Establish the low-level interception boundary, bridging hardware-level warp synchronization directly into pythonic lifecycles.
+* **`aging_fng_orchestrator.py`**: Investigates the runtime feasibility of moving high-dimensional live numerical tensors across simulated fading nodes without re-triggering expensive XLA compilation passes.
